@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Market, Platform } from '@/lib/types'
 import { fetchPolymarket } from '@/lib/platforms/polymarket'
 import { fetchKalshi } from '@/lib/platforms/kalshi'
@@ -10,11 +10,8 @@ export function useMarkets(platform: Platform | 'all' = 'all') {
   const [markets, setMarkets] = useState<Market[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const abortRef = useRef(false)
-  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const fetchAll = useCallback(async () => {
-    if (abortRef.current) return
     setLoading(true)
     setError(null)
 
@@ -49,8 +46,6 @@ export function useMarkets(platform: Platform | 'all' = 'all') {
 
     const allResults = await Promise.allSettled(promises)
 
-    if (abortRef.current) return
-
     for (const r of allResults) {
       if (r.status === 'fulfilled' && r.value) {
         results.push(...r.value)
@@ -73,17 +68,14 @@ export function useMarkets(platform: Platform | 'all' = 'all') {
 
     setLoading(false)
 
-    if (!abortRef.current) {
-      timeoutRef.current = setTimeout(fetchAll, MARKET_POLL_INTERVAL)
-    }
   }, [platform])
 
   useEffect(() => {
-    abortRef.current = false
-    fetchAll()
+    const initialId = window.setTimeout(fetchAll, 0)
+    const intervalId = window.setInterval(fetchAll, MARKET_POLL_INTERVAL)
     return () => {
-      abortRef.current = true
-      if (timeoutRef.current) clearTimeout(timeoutRef.current)
+      window.clearTimeout(initialId)
+      window.clearInterval(intervalId)
     }
   }, [fetchAll])
 

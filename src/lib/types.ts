@@ -18,11 +18,37 @@ export interface Market {
   volume: number
   volume24h: number
   liquidity?: number
+  collateralCurrency?: 'pUSD' | 'USD'
   status: 'active' | 'closed' | 'resolved'
   createdAt?: string
   endDate?: string
   slug?: string
   extra?: Record<string, unknown>
+}
+
+export interface PolymarketEvent {
+  id: string | number
+  title?: string
+  description?: string
+  image?: string
+  slug?: string
+  volume?: number
+  volume24hr?: number
+  liquidity?: number
+  startDate?: string
+  endDate?: string
+  markets?: PolymarketRawMarket[]
+}
+
+export interface PolymarketRawMarket extends Record<string, unknown> {
+  id?: string | number
+  question?: string
+  groupItemTitle?: string
+  outcomes?: string
+  outcomePrices?: string
+  clobTokenIds?: string
+  closed?: boolean
+  conditionId?: string
 }
 
 export interface NewsItem {

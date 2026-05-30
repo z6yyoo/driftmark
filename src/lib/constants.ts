@@ -30,6 +30,23 @@ export const NEWS_POLL_INTERVAL = 300_000
 export const MAX_ALERTS = 500
 export const MAX_PRICE_SNAPSHOTS = 2000
 
+export const POLYMARKET_API_ENDPOINTS = {
+  gamma: 'https://gamma-api.polymarket.com',
+  data: 'https://data-api.polymarket.com',
+  clob: 'https://clob.polymarket.com',
+} as const
+
+export const POLYMARKET_COLLATERAL_CURRENCY = 'pUSD'
+
+export const REAL_TRADING_ENABLED = false
+
+export const POLYMARKET_TRADING_CONFIG = {
+  enabled: REAL_TRADING_ENABLED,
+  mode: 'disabled-read-only-viewer',
+  collateralCurrency: POLYMARKET_COLLATERAL_CURRENCY,
+  clobEndpoint: POLYMARKET_API_ENDPOINTS.clob,
+} as const
+
 export const POLYMARKET_WS_URL = 'wss://ws-subscriptions-clob.polymarket.com/ws/market'
 export const WS_HEARTBEAT_INTERVAL = 10_000
 export const WS_RECONNECT_DELAY = 5_000

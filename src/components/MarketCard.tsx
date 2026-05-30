@@ -72,7 +72,9 @@ export function MarketCard({ market, snapshot }: MarketCardProps) {
             className="text-xs font-normal border-current/20"
             style={{ color: platformColor }}
           >
-            {PLATFORM_LABELS[market.platform]}
+            {market.collateralCurrency
+              ? `${PLATFORM_LABELS[market.platform]} · ${market.collateralCurrency}`
+              : PLATFORM_LABELS[market.platform]}
           </Badge>
 
           <div className="flex items-center gap-2">

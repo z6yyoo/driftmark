@@ -1,4 +1,5 @@
-import { Market } from '../types'
+import { POLYMARKET_COLLATERAL_CURRENCY } from '../constants'
+import { Market, PolymarketEvent } from '../types'
 
 const MAX_REASONABLE_SPREAD = 0.5
 const ILLIQUID_ASK_THRESHOLD = 0.95
@@ -36,7 +37,7 @@ export async function fetchPolymarket(limit: number, offset: number): Promise<Ma
     `/api/polymarket?endpoint=events&active=true&closed=false&limit=${limit}&offset=${offset}&order=volume24hr&ascending=false`
   )
   if (!res.ok) throw new Error('Failed to fetch Polymarket data')
-  const events = await res.json()
+  const events: PolymarketEvent[] = await res.json()
   if (!Array.isArray(events)) return []
 
   const markets: Market[] = []
@@ -92,7 +93,7 @@ export async function fetchPolymarket(limit: number, offset: number): Promise<Ma
     markets.push({
       id: String(event.id),
       platform: 'polymarket',
-      title: event.title,
+      title: event.title || primaryMarket.question || 'Untitled Polymarket event',
       description: event.description,
       imageUrl: event.image,
       url: `https://polymarket.com/event/${event.slug}`,
@@ -100,6 +101,7 @@ export async function fetchPolymarket(limit: number, offset: number): Promise<Ma
       volume: event.volume || 0,
       volume24h: event.volume24hr || 0,
       liquidity: event.liquidity || 0,
+      collateralCurrency: POLYMARKET_COLLATERAL_CURRENCY,
       status: 'active',
       createdAt: event.startDate,
       endDate: event.endDate,

@@ -1,8 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-
-const GAMMA_API = 'https://gamma-api.polymarket.com'
-const DATA_API = 'https://data-api.polymarket.com'
-const CLOB_API = 'https://clob.polymarket.com'
+import { POLYMARKET_API_ENDPOINTS } from '@/lib/constants'
 
 const ALLOWED_ENDPOINTS = ['events', 'markets', 'trades', 'positions', 'prices-history', 'book', 'midpoint']
 
@@ -19,11 +16,11 @@ export async function GET(request: NextRequest) {
     if (key !== 'endpoint') params.set(key, value)
   })
 
-  let baseUrl = GAMMA_API
+  let baseUrl: string = POLYMARKET_API_ENDPOINTS.gamma
   if (endpoint.startsWith('trades') || endpoint.startsWith('positions')) {
-    baseUrl = DATA_API
+    baseUrl = POLYMARKET_API_ENDPOINTS.data
   } else if (endpoint.startsWith('prices-history') || endpoint.startsWith('book') || endpoint.startsWith('midpoint')) {
-    baseUrl = CLOB_API
+    baseUrl = POLYMARKET_API_ENDPOINTS.clob
   }
 
   try {

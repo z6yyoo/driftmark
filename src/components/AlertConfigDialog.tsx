@@ -54,7 +54,7 @@ export function AlertConfigDialog({ open, onOpenChange }: AlertConfigDialogProps
               aria-label="Price change threshold percentage"
             />
             <p className="text-xs text-muted-foreground">
-              Alert when a market's lead probability changes by more than {config.thresholdPercent}%
+              Alert when a market&apos;s lead probability changes by more than {config.thresholdPercent}%
             </p>
           </div>
 
